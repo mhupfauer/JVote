@@ -17,13 +17,13 @@ public class UserController {
     private UserEntRepository userEntRepository;
 
     @GetMapping("/")
-    public List<UserEnt> getAllUser(){
+    public List<UserEnt> getAllUser() {
         return userEntRepository.findAll();
     }
 
     @GetMapping("/{search}")
-    public Object searchUser(@PathVariable(name = "search")String searchStr){
-        if(searchStr.contains("@")){
+    public Object searchUser(@PathVariable(name = "search") String searchStr) {
+        if (searchStr.contains("@")) {
             return userEntRepository.findByEmail(searchStr);
         }
         return userEntRepository.findById(Long.parseLong(searchStr)).get();

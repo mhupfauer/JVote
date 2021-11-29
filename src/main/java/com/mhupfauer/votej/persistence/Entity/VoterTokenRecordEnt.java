@@ -12,9 +12,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class VoterTokenRecordEnt {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     @ManyToOne
     @JoinColumn(name = "question_id")
     QuestionEnt question;
@@ -22,4 +19,7 @@ public class VoterTokenRecordEnt {
     @JoinColumn(name = "user_id")
     UserEnt user;
     boolean is_token_issued;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 }
