@@ -1,5 +1,6 @@
 package com.mhupfauer.votej.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class EventEnt {
     @JoinColumn(name = "organizer_id")
     private UserEnt organizer;
 
+    @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
     private List<BallotEnt> ballots;
 }

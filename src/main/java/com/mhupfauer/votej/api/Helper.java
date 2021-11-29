@@ -40,7 +40,9 @@ public class Helper {
         Class clazz = entity.getClass();
         fields.forEach((k, v) -> {
             Field field = ReflectionUtils.findField(clazz, k);
-            if (field == null) return;
+            if (field == null) {
+                return;
+            }
 
             if (this.getHandleableCustomTypes().containsKey(field.getType())) {
                 String vStr = String.valueOf(v);
@@ -70,9 +72,23 @@ public class Helper {
                 return;
             }
 
+            if (!Arrays.asList(String.class, Integer.class, Long.class, Boolean.class).contains(field.getType())) {
+                dirty[0] = true;
+                return;
+            }
+
             field.setAccessible(true);
             ReflectionUtils.setField(field, entity, v);
         });
         return dirty[0];
+    }
+
+    public Map<String, Object> changeField(Map<String, Object> fields, String key, Object val) {
+        if (fields.containsKey(key)) {
+            fields.replace(key, val);
+        } else {
+            fields.put(key, val);
+        }
+        return fields;
     }
 }

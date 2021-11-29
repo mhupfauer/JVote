@@ -1,5 +1,6 @@
 package com.mhupfauer.votej.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class VoterRegEnt {
     @JoinColumn(name = "user_id")
     private UserEnt user;
     private Boolean activated;
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ballot_id")
     private BallotEnt ballot;
