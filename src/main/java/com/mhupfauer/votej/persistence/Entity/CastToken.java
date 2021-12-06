@@ -1,15 +1,13 @@
 package com.mhupfauer.votej.persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity(name = "CastToken")
 @Table(name = "CASTTOKEN")
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter

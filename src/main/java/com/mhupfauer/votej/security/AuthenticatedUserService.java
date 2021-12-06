@@ -14,6 +14,7 @@ public class AuthenticatedUserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        username = username.toLowerCase();
         if (userEntRepository.findByEmail(username) == null) {
             throw new UsernameNotFoundException("Username: " + username + " not found");
         }

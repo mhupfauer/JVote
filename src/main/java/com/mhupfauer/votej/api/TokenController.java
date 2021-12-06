@@ -13,7 +13,7 @@ import java.security.SecureRandom;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/event/{event_id}/ballot/{ballot_id/question/{question_id}/token")
+@RequestMapping("api/event/{event_id}/ballot/{ballot_id}/question/{question_id}/token")
 public class TokenController {
 
     @Autowired
@@ -80,7 +80,7 @@ public class TokenController {
             voterTokenRecordEnt = null;
             return castToken;
         } else {
-            return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<HttpStatus>(HttpStatus.FORBIDDEN);
         }
     }
 
@@ -90,12 +90,8 @@ public class TokenController {
         if(questionEntRepository.findById(qid).isEmpty())
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        castTokenRepository.getCastTokensByQuestion(questionEntRepository.findById(qid).get()).forEach((question) -> {
-            castTokenRepository.delete(question);
-        });
-        voterTokenRecordEntRepository.getVoterTokenRecordEntsByQuestion(questionEntRepository.findById(qid).get()).forEach((voterToken) -> {
-            voterTokenRecordEntRepository.delete(voterToken);
-        });
+        castTokenRepository.deleteAll(castTokenRepository.getCastTokensByQuestion(questionEntRepository.findById(qid).get()));
+        voterTokenRecordEntRepository.deleteAll(voterTokenRecordEntRepository.getVoterTokenRecordEntsByQuestion(questionEntRepository.findById(qid).get()));
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

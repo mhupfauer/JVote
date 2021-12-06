@@ -9,9 +9,8 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class Helper {
@@ -26,12 +25,16 @@ public class Helper {
     private EventEntRepository eventEntRepository;
     @Autowired
     private QuestionEntRepository questionEntRepository;
+    @Autowired
+    private VoterTokenRecordEntRepository voterTokenRecordEntRepository;
+    @Autowired
+    private CastTokenRepository castTokenRepository;
+    @Autowired
+    private VoterRegEntRepository voterRegEntRepository;
 
     public Map<Class, Field> getHandleableCustomTypes() {
         Map<Class, Field> map = new HashMap<>();
-        Arrays.asList(this.getClass().getDeclaredFields()).forEach((fieldz -> {
-            map.put(((Class) ((ParameterizedType) fieldz.getType().getGenericInterfaces()[0]).getActualTypeArguments()[0]), fieldz);
-        }));
+        Arrays.asList(this.getClass().getDeclaredFields()).forEach((fieldz -> map.put(((Class) ((ParameterizedType) fieldz.getType().getGenericInterfaces()[0]).getActualTypeArguments()[0]), fieldz)));
         return map;
     }
 
@@ -53,11 +56,11 @@ public class Helper {
                 Long vLong = Long.parseLong(vStr);
                 Arrays.asList(clazz.getDeclaredMethods()).forEach((method) -> {
                     if (method.getName().toLowerCase().equals("set" + k) && method.getParameterCount() == 1) {
-                        Class paramType = method.getParameterTypes()[0];
+                        Class<?> paramType = method.getParameterTypes()[0];
                         Field repoField = this.getHandleableCustomTypes().get(paramType);
                         repoField.setAccessible(true);
                         try {
-                            JpaRepository<Object, Object> repo = (JpaRepository<Object, Object>) repoField.get(this);
+                            JpaRepository repo = (JpaRepository) repoField.get(this);
                             if (repo.findById(vLong).isEmpty()) {
                                 method.invoke(entity, (Object) null);
                                 return;
@@ -69,6 +72,18 @@ public class Helper {
                         }
                     }
                 });
+                return;
+            }
+
+            if(field.getType().isEnum() && v.getClass() == String.class)
+            {
+                for (Object enumConstant : field.getType().getEnumConstants()) {
+                    if (enumConstant.toString().equals(v.toString().toUpperCase()))
+                    {
+                        field.setAccessible(true);
+                        ReflectionUtils.setField(field, entity, enumConstant);
+                    }
+                }
                 return;
             }
 
@@ -90,5 +105,23 @@ public class Helper {
             fields.put(key, val);
         }
         return fields;
+    }
+
+    public Map<String, Object> getMapWithoutFields(Object obj, String... fields)
+    {
+        Map<String, Object> map = new HashMap<>();
+        List<String> fieldsToRemove = Arrays.asList(fields);
+        List<Field> fieldList = Arrays.stream(obj.getClass().getDeclaredFields()).filter
+                (field -> !fieldsToRemove.contains(field.getName())).collect(Collectors.toList());
+
+        fieldList.forEach(field -> {
+            field.setAccessible(true);
+            try {
+                map.put(field.getName(), field.get(obj));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        });
+        return map;
     }
 }

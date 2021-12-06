@@ -25,9 +25,11 @@ public class AuthenticatedUser implements UserDetails {
         return user.getPass();
     }
 
+    public UserEnt getUser() { return this.user; }
+
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return user.getEmail().toLowerCase();
     }
 
     @Override
