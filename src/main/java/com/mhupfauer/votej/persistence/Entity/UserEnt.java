@@ -22,5 +22,6 @@ public class UserEnt {
     private Long dateofbirthtimestamp;
     private String phonenumber;
     private String pass;
+    private Long lastlogintimestamp;
     private ROLES role;
 }

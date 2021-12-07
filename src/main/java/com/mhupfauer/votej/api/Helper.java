@@ -1,8 +1,11 @@
 package com.mhupfauer.votej.api;
 
+import com.mhupfauer.votej.persistence.Entity.UserEnt;
 import com.mhupfauer.votej.persistence.Repo.*;
+import com.mhupfauer.votej.security.AuthenticatedUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
@@ -123,5 +126,10 @@ public class Helper {
             }
         });
         return map;
+    }
+
+    public UserEnt getCurrentUser()
+    {
+        return ((AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUser();
     }
 }
