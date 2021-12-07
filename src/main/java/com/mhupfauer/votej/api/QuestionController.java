@@ -1,13 +1,11 @@
 package com.mhupfauer.votej.api;
 
-import com.mhupfauer.votej.persistence.Entity.BallotEnt;
 import com.mhupfauer.votej.persistence.Entity.QuestionEnt;
 import com.mhupfauer.votej.persistence.Repo.BallotEntRepository;
 import com.mhupfauer.votej.persistence.Repo.QuestionEntRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;

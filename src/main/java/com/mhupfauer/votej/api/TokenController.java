@@ -1,16 +1,17 @@
 package com.mhupfauer.votej.api;
 
 import com.mhupfauer.votej.persistence.Entity.CastToken;
-import com.mhupfauer.votej.persistence.Entity.VoterRegEnt;
 import com.mhupfauer.votej.persistence.Entity.VoterTokenRecordEnt;
-import com.mhupfauer.votej.persistence.Repo.*;
+import com.mhupfauer.votej.persistence.Repo.CastTokenRepository;
+import com.mhupfauer.votej.persistence.Repo.QuestionEntRepository;
+import com.mhupfauer.votej.persistence.Repo.UserEntRepository;
+import com.mhupfauer.votej.persistence.Repo.VoterTokenRecordEntRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.SecureRandom;
-import java.util.List;
 
 @RestController
 @RequestMapping("api/event/{event_id}/ballot/{ballot_id}/question/{question_id}/token")
