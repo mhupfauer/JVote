@@ -9,46 +9,48 @@ import java.util.Collection;
 
 public class AuthenticatedUser implements UserDetails {
 
-    private final UserEnt user;
+  private final UserEnt user;
 
-    protected AuthenticatedUser(UserEnt user) {
-        this.user = user;
-    }
+  protected AuthenticatedUser(UserEnt user) {
+    this.user = user;
+  }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("ROLE_" + user.getRole());
-    }
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return AuthorityUtils.createAuthorityList("ROLE_" + user.getRole());
+  }
 
-    @Override
-    public String getPassword() {
-        return user.getPass();
-    }
+  @Override
+  public String getPassword() {
+    return user.getPass();
+  }
 
-    public UserEnt getUser() { return this.user; }
+  public UserEnt getUser() {
+    return this.user;
+  }
 
-    @Override
-    public String getUsername() {
-        return user.getEmail().toLowerCase();
-    }
+  @Override
+  public String getUsername() {
+    return user.getEmail().toLowerCase();
+  }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+  @Override
+  public boolean isEnabled() {
+    return true;
+  }
 }

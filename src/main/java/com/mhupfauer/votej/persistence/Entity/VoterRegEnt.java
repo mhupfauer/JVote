@@ -13,16 +13,18 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class VoterRegEnt {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long ID;
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private UserEnt user;
-    private Boolean activated;
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ballot_id")
-    private BallotEnt ballot;
-}
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long ID;
 
+  @OneToOne
+  @JoinColumn(name = "user_id")
+  private UserEnt user;
+
+  private Boolean activated;
+
+  @JsonBackReference
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "ballot_id")
+  private BallotEnt ballot;
+}

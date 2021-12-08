@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CastTokenRepository extends JpaRepository<CastToken, Long> {
-    List<CastToken> getCastTokensByQuestion(QuestionEnt questionEnt);
+  List<CastToken> getCastTokensByQuestion(QuestionEnt questionEnt);
 }

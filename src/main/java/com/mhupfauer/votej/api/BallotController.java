@@ -15,59 +15,61 @@ import java.util.Map;
 @RequestMapping("api/event/{event_id}/ballot")
 public class BallotController {
 
-    @Autowired
-    private BallotEntRepository ballotEntRepository;
+  @Autowired private BallotEntRepository ballotEntRepository;
 
-    @Autowired
-    private EventEntRepository eventEntRepository;
+  @Autowired private EventEntRepository eventEntRepository;
 
-    @Autowired
-    private Helper helper;
+  @Autowired private Helper helper;
 
-    @GetMapping("/")
-    public List<BallotEnt> getAllBallots(@PathVariable(name = "event_id") Long eid) {
-        return ballotEntRepository.getBallotEntsByEvent(eventEntRepository.findById(eid).get());
+  @GetMapping("/")
+  public List<BallotEnt> getAllBallots(@PathVariable(name = "event_id") Long eid) {
+    return ballotEntRepository.getBallotEntsByEvent(eventEntRepository.findById(eid).get());
+  }
+
+  @GetMapping("/{ballot_id}")
+  public Object getBallotById(@PathVariable(name = "ballot_id") Long bid) {
+    if (ballotEntRepository.findById(bid).isEmpty()) {
+      return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
     }
+    return ballotEntRepository.findById(bid).get();
+  }
 
-    @GetMapping("/{ballot_id}")
-    public Object getBallotById(@PathVariable(name = "ballot_id") Long bid) {
-        if (ballotEntRepository.findById(bid).isEmpty()) {
-            return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
-        }
-        return ballotEntRepository.findById(bid).get();
+  @PostMapping("/")
+  public ResponseEntity<HttpStatus> newBallot(
+      @PathVariable(name = "event_id") Long eid, @RequestBody Map<String, Object> fields) {
+    BallotEnt ballotEnt = new BallotEnt();
+    fields = helper.changeField(fields, "event", eid);
+    if (helper.setFields(fields, ballotEnt)) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+    ballotEntRepository.save(ballotEnt);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
-    @PostMapping("/")
-    public ResponseEntity<HttpStatus> newBallot(@PathVariable(name = "event_id") Long eid, @RequestBody Map<String, Object> fields) {
-        BallotEnt ballotEnt = new BallotEnt();
-        fields = helper.changeField(fields, "event", eid);
-        if (helper.setFields(fields, ballotEnt)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        ballotEntRepository.save(ballotEnt);
-        return new ResponseEntity<>(HttpStatus.OK);
+  @PatchMapping("/{ballot_id}")
+  public ResponseEntity<HttpStatus> patchBallot(
+      @PathVariable(name = "event_id") Long eid,
+      @PathVariable(name = "ballot_id") Long bid,
+      @RequestBody Map<String, Object> fields) {
+    if (ballotEntRepository.findById(bid).isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    fields = helper.changeField(fields, "event", eid);
+    BallotEnt ballotEnt = ballotEntRepository.findById(bid).get();
+    if (helper.setFields(fields, ballotEnt)) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    ballotEntRepository.save(ballotEnt);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
-    @PatchMapping("/{ballot_id}")
-    public ResponseEntity<HttpStatus> patchBallot(@PathVariable(name = "event_id") Long eid, @PathVariable(name = "ballot_id") Long bid, @RequestBody Map<String, Object> fields) {
-        if (ballotEntRepository.findById(bid).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        fields = helper.changeField(fields, "event", eid);
-        BallotEnt ballotEnt = ballotEntRepository.findById(bid).get();
-        if (helper.setFields(fields, ballotEnt)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        ballotEntRepository.save(ballotEnt);
-        return new ResponseEntity<>(HttpStatus.OK);
+  @DeleteMapping("/{ballot_id}")
+  public ResponseEntity<HttpStatus> deleteBallot(
+      @PathVariable(name = "ballot_id") Long bid, @RequestBody Map<String, Object> fields) {
+    if (ballotEntRepository.findById(bid).isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-    @DeleteMapping("/{ballot_id}")
-    public ResponseEntity<HttpStatus> deleteBallot(@PathVariable(name = "ballot_id") Long bid, @RequestBody Map<String, Object> fields) {
-        if (ballotEntRepository.findById(bid).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        ballotEntRepository.delete(ballotEntRepository.findById(bid).get());
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+    ballotEntRepository.delete(ballotEntRepository.findById(bid).get());
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }

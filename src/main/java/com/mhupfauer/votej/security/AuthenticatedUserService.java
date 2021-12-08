@@ -9,15 +9,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticatedUserService implements UserDetailsService {
-    @Autowired
-    private UserEntRepository userEntRepository;
+  @Autowired private UserEntRepository userEntRepository;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        username = username.toLowerCase();
-        if (userEntRepository.findByEmail(username) == null) {
-            throw new UsernameNotFoundException("Username: " + username + " not found");
-        }
-        return new AuthenticatedUser(userEntRepository.findByEmail(username));
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    username = username.toLowerCase();
+    if (userEntRepository.findByEmail(username) == null) {
+      throw new UsernameNotFoundException("Username: " + username + " not found");
     }
+    return new AuthenticatedUser(userEntRepository.findByEmail(username));
+  }
 }

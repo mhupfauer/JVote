@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface VoterTokenRecordEntRepository extends JpaRepository<VoterTokenRecordEnt, Long> {
-    List<VoterTokenRecordEnt> getVoterTokenRecordEntsByUserAndQuestion(UserEnt userEnt, QuestionEnt questionEnt);
-    List<VoterTokenRecordEnt> getVoterTokenRecordEntsByQuestion(QuestionEnt questionEnt);
+  List<VoterTokenRecordEnt> getVoterTokenRecordEntsByUserAndQuestion(
+      UserEnt userEnt, QuestionEnt questionEnt);
+
+  List<VoterTokenRecordEnt> getVoterTokenRecordEntsByQuestion(QuestionEnt questionEnt);
 }

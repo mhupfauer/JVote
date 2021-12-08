@@ -14,17 +14,18 @@ import java.util.List;
 @Entity(name = "Event")
 @Table(name = "EVENTS")
 public class EventEnt {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long ID;
-    private String title;
-    private Long event_timestamp;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long ID;
 
-    @OneToOne
-    @JoinColumn(name = "organizer_id")
-    private UserEnt organizer;
+  private String title;
+  private Long event_timestamp;
 
-    @JsonManagedReference
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
-    private List<BallotEnt> ballots;
+  @OneToOne
+  @JoinColumn(name = "organizer_id")
+  private UserEnt organizer;
+
+  @JsonManagedReference
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "event")
+  private List<BallotEnt> ballots;
 }

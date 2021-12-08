@@ -13,13 +13,15 @@ import java.time.Instant;
 @Component
 public class AuthEventListener implements ApplicationListener<AuthenticationSuccessEvent> {
 
-    @Autowired
-    UserEntRepository userEntRepository;
+  @Autowired UserEntRepository userEntRepository;
 
-    @Override
-    public void onApplicationEvent(AuthenticationSuccessEvent event) {
-        UserEnt userEnt = ((AuthenticatedUser) ((UsernamePasswordAuthenticationToken) event.getSource()).getPrincipal()).getUser();
-        userEnt.setLastlogintimestamp(Instant.now().getEpochSecond());
-        userEntRepository.save(userEnt);
-    }
+  @Override
+  public void onApplicationEvent(AuthenticationSuccessEvent event) {
+    UserEnt userEnt =
+        ((AuthenticatedUser)
+                ((UsernamePasswordAuthenticationToken) event.getSource()).getPrincipal())
+            .getUser();
+    userEnt.setLastlogintimestamp(Instant.now().getEpochSecond());
+    userEntRepository.save(userEnt);
+  }
 }

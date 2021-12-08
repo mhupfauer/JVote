@@ -13,15 +13,16 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class UserEnt {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String firstname;
-    private String lastname;
-    private String email;
-    private Long dateofbirthtimestamp;
-    private String phonenumber;
-    private String pass;
-    private Long lastlogintimestamp;
-    private ROLES role;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
+
+  private String firstname;
+  private String lastname;
+  private String email;
+  private Long dateofbirthtimestamp;
+  private String phonenumber;
+  private String pass;
+  private Long lastlogintimestamp;
+  private ROLES role;
 }

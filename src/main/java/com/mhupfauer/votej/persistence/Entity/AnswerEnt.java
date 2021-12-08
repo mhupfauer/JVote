@@ -12,14 +12,17 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class AnswerEnt {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long ID;
-    @OneToOne
-    @JoinColumn(name = "casttoken_id")
-    private CastToken token;
-    @ManyToOne
-    @JoinColumn(name = "question_id")
-    private QuestionEnt question;
-    private String encrypted_answer;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long ID;
+
+  @OneToOne
+  @JoinColumn(name = "casttoken_id")
+  private CastToken token;
+
+  @ManyToOne
+  @JoinColumn(name = "question_id")
+  private QuestionEnt question;
+
+  private String encrypted_answer;
 }

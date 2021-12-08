@@ -14,54 +14,54 @@ import java.util.Map;
 @RequestMapping("api/event")
 public class EventController {
 
-    @Autowired
-    private EventEntRepository eventEntRepository;
+  @Autowired private EventEntRepository eventEntRepository;
 
-    @Autowired
-    private Helper helper;
+  @Autowired private Helper helper;
 
-    @GetMapping("/")
-    public List<EventEnt> getAllEvents() {
-        return eventEntRepository.findAll();
+  @GetMapping("/")
+  public List<EventEnt> getAllEvents() {
+    return eventEntRepository.findAll();
+  }
+
+  @GetMapping("/{id}")
+  public Object getEventById(@PathVariable(name = "id") Long id) {
+    if (eventEntRepository.findById(id).isEmpty()) {
+      return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
     }
+    return eventEntRepository.findById(id).get();
+  }
 
-    @GetMapping("/{id}")
-    public Object getEventById(@PathVariable(name = "id") Long id) {
-        if (eventEntRepository.findById(id).isEmpty()) {
-            return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
-        }
-        return eventEntRepository.findById(id).get();
+  @PostMapping("/")
+  public ResponseEntity<HttpStatus> newEvent(@RequestBody Map<String, Object> fields) {
+    var eventToCreate = new EventEnt();
+    if (helper.setFields(fields, eventToCreate)) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+    eventEntRepository.save(eventToCreate);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
-    @PostMapping("/")
-    public ResponseEntity<HttpStatus> newEvent(@RequestBody Map<String, Object> fields) {
-        var eventToCreate = new EventEnt();
-        if (helper.setFields(fields, eventToCreate)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        eventEntRepository.save(eventToCreate);
-        return new ResponseEntity<>(HttpStatus.OK);
+  @PatchMapping("/{id}")
+  public ResponseEntity<HttpStatus> patchEvent(
+      @PathVariable(name = "id") Long id, @RequestBody Map<String, Object> fields) {
+    if (eventEntRepository.findById(id).isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    var event = eventEntRepository.findById(id).get();
+    if (helper.setFields(fields, event)) {
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    eventEntRepository.save(event);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<HttpStatus> patchEvent(@PathVariable(name = "id") Long id, @RequestBody Map<String, Object> fields) {
-        if (eventEntRepository.findById(id).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        var event = eventEntRepository.findById(id).get();
-        if (helper.setFields(fields, event)) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        eventEntRepository.save(event);
-        return new ResponseEntity<>(HttpStatus.OK);
+  @DeleteMapping("/{id}")
+  public ResponseEntity<HttpStatus> deleteEvent(
+      @PathVariable(name = "id") Long id, @RequestBody Map<String, Object> fields) {
+    if (eventEntRepository.findById(id).isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteEvent(@PathVariable(name = "id") Long id, @RequestBody Map<String, Object> fields) {
-        if (eventEntRepository.findById(id).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        eventEntRepository.delete(eventEntRepository.findById(id).get());
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+    eventEntRepository.delete(eventEntRepository.findById(id).get());
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
 }

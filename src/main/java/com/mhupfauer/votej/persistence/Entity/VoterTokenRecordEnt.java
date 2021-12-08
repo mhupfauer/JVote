@@ -13,15 +13,17 @@ import javax.persistence.*;
 @Setter
 @Builder
 public class VoterTokenRecordEnt {
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "question_id")
-    QuestionEnt question;
-    @JsonBackReference
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    UserEnt user;
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @JsonBackReference
+  @ManyToOne
+  @JoinColumn(name = "question_id")
+  QuestionEnt question;
+
+  @JsonBackReference
+  @OneToOne
+  @JoinColumn(name = "user_id")
+  UserEnt user;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 }
